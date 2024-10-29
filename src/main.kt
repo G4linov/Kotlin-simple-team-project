@@ -62,7 +62,14 @@ fun encryptStringWithRSAAndPunctuation(text: String, publicKey: Pair<Long, Long>
     *
     * Фунция шифрует каждый символ строки и разделяет их случайным символом припенания.
     */
-    return ""
+    val punctuationMarks = listOf(',', '.', '!', '?', ':', ';', '-', '_')
+    val encryptedText = StringBuilder()
+    for (char in text) {
+        val encryptedChar = rsaEncrypt(char, publicKey)
+        encryptedText.append(encryptedChar)
+        encryptedText.append(punctuationMarks.random())
+    }
+    return encryptedText.toString()
 }
 
 // Данила Лапшин
