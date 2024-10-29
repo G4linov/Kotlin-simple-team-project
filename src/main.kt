@@ -1,3 +1,4 @@
+import java.math.BigInteger
 
 // Вячеслав Галинов
 // Функция для проверки, является ли число простым
@@ -40,7 +41,13 @@ fun rsaEncrypt(char: Char, publicKey: Pair<Long, Long>): Long {
     *
     * Функция зашифровывает символ строки и возвращает его.
     */
-    return 0L
+    val (e, n) = publicKey
+    val bigE = BigInteger.valueOf(e)
+    val bigN = BigInteger.valueOf(n)
+    val charValue = BigInteger.valueOf(char.code.toLong())
+    val encryptedChar = charValue.modPow(bigE, bigN)
+    return encryptedChar.toLong()
+
 }
 
 // Дмитрий Крымин
