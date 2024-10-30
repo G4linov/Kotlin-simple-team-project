@@ -1,32 +1,74 @@
+import kotlin.math.sqrt
+import kotlin.random.Random
 
 // Вячеслав Галинов
 // Функция для проверки, является ли число простым
 fun isPrime(n: Long): Boolean {
-    return false
+    if (n < 2) return false
+    for (i in 2..sqrt(n.toDouble()).toLong()) {
+        if (n % i == 0L) return false
+    }
+    return true
 }
 
 // Вячеслав Галинов
 // Функция для нахождения случайного простого числа
 fun generatePrime(min: Long, max: Long): Long {
-    return 0
+    var prime: Long
+    do {
+        prime = Random.nextLong(min, max)
+    } while (!isPrime(prime))
+    return prime
 }
 
 // Вячеслав Галинов
 // Расширенный алгоритм Евклида для нахождения обратного по модулю числа
 fun extendedGCD(a: Long, b: Long): Pair<Long, Long> {
-    return Pair(0L, 0L)
+    var oldR = a
+    var r = b
+    var oldS = 1L
+    var s = 0L
+    var oldT = 0L
+    var t = 1L
+
+    while (r != 0L) {
+        val quotient = oldR / r
+        val tmpR = r
+        r = oldR - quotient * tmpR
+        oldR = tmpR
+
+        val tmpS = s
+        s = oldS - quotient * tmpS
+        oldS = tmpS
+
+        val tmpT = t
+        t = oldT - quotient * tmpT
+        oldT = tmpT
+    }
+
+    return Pair(oldS, oldT)
 }
 
 // Вячеслав Галинов
 // Функция для нахождения мультипликативной обратной по модулю
 fun modInverse(e: Long, phi: Long): Long {
-    return 0L
+    val (x, _) = extendedGCD(e, phi)
+    return (x % phi + phi) % phi
 }
 
 // Вячеслав Галинов
 // Основная функция для генерации ключей RSA
 fun generateRSAKeyPair(): Pair<Pair<Long, Long>, Pair<Long, Long>> {
-    return Pair(Pair(0L, 0L), Pair(0L, 0L))
+    val p = generatePrime(10000, 50000)
+    val q = generatePrime(10000, 50000)
+    val n = p * q
+    val phi = (p - 1) * (q - 1)
+    var e = 65537L
+    if (phi % e == 0L) {
+        e = generatePrime(3, phi)
+    }
+    val d = modInverse(e, phi)
+    return Pair(Pair(e, n), Pair(d, n))
 }
 
 // Дмитрий Крымин
