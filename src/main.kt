@@ -125,7 +125,11 @@ fun rsaDecrypt(encryptedChar: Long, privateKey: Pair<Long, Long>): Char {
     *
     * Функция расшифровывает символ строки и возвращает его.
     */
-    return 'a'
+    val (d, n) = privateKey
+    val bigD = BigInteger.valueOf(d)
+    val bigN = BigInteger.valueOf(n)
+    val decryptedChar = BigInteger.valueOf(encryptedChar).modPow(bigD, bigN)
+    return decryptedChar.toInt().toChar()
 }
 
 // Данила Лапшин
@@ -140,7 +144,18 @@ fun decryptStringWithRSAAndPunctuation(encryptedText: String, privateKey: Pair<L
     *
     * Функция расшифровывает полную строки.
     */
-    return "a"
+    val decryptedText = StringBuilder()
+    val encryptedChars = encryptedText.split(Regex("[,\\.\\!\\?\\:\\;\\-_]")) // разделяем зашифрованные символы
+    for (encryptedChar in encryptedChars) {
+        if (encryptedChar.isNotEmpty()) {
+            val charValue = encryptedChar.toLongOrNull()
+            if (charValue != null) {
+                val decryptedChar = rsaDecrypt(charValue, privateKey)
+                decryptedText.append(decryptedChar)
+            }
+        }
+    }
+    return decryptedText.toString()
 }
 
 
