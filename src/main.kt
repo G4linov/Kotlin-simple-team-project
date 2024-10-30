@@ -144,7 +144,18 @@ fun decryptStringWithRSAAndPunctuation(encryptedText: String, privateKey: Pair<L
     *
     * Функция расшифровывает полную строки.
     */
-    return "a"
+    val decryptedText = StringBuilder()
+    val encryptedChars = encryptedText.split(Regex("[,\\.\\!\\?\\:\\;\\-_]")) // разделяем зашифрованные символы
+    for (encryptedChar in encryptedChars) {
+        if (encryptedChar.isNotEmpty()) {
+            val charValue = encryptedChar.toLongOrNull()
+            if (charValue != null) {
+                val decryptedChar = rsaDecrypt(charValue, privateKey)
+                decryptedText.append(decryptedChar)
+            }
+        }
+    }
+    return decryptedText.toString()
 }
 
 
