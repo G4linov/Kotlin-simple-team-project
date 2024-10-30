@@ -205,6 +205,10 @@ fun main() {
                 println(helpInfo)
             }
 
+            "exit" -> {
+                break
+            }
+
             else -> {
                 println("No such command found.")
             }
