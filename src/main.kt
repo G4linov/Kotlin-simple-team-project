@@ -125,7 +125,11 @@ fun rsaDecrypt(encryptedChar: Long, privateKey: Pair<Long, Long>): Char {
     *
     * Функция расшифровывает символ строки и возвращает его.
     */
-    return 'a'
+    val (d, n) = privateKey
+    val bigD = BigInteger.valueOf(d)
+    val bigN = BigInteger.valueOf(n)
+    val decryptedChar = BigInteger.valueOf(encryptedChar).modPow(bigD, bigN)
+    return decryptedChar.toInt().toChar()
 }
 
 // Данила Лапшин
