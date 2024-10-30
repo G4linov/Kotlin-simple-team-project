@@ -1,3 +1,4 @@
+import java.math.BigInteger
 import kotlin.math.sqrt
 import kotlin.random.Random
 
@@ -82,7 +83,13 @@ fun rsaEncrypt(char: Char, publicKey: Pair<Long, Long>): Long {
     *
     * Функция зашифровывает символ строки и возвращает его.
     */
-    return 0L
+    val (e, n) = publicKey
+    val bigE = BigInteger.valueOf(e)
+    val bigN = BigInteger.valueOf(n)
+    val charValue = BigInteger.valueOf(char.code.toLong())
+    val encryptedChar = charValue.modPow(bigE, bigN)
+    return encryptedChar.toLong()
+
 }
 
 // Дмитрий Крымин
@@ -97,7 +104,14 @@ fun encryptStringWithRSAAndPunctuation(text: String, publicKey: Pair<Long, Long>
     *
     * Фунция шифрует каждый символ строки и разделяет их случайным символом припенания.
     */
-    return ""
+    val punctuationMarks = listOf(',', '.', '!', '?', ':', ';', '-', '_')
+    val encryptedText = StringBuilder()
+    for (char in text) {
+        val encryptedChar = rsaEncrypt(char, publicKey)
+        encryptedText.append(encryptedChar)
+        encryptedText.append(punctuationMarks.random())
+    }
+    return encryptedText.toString()
 }
 
 // Данила Лапшин
